@@ -51,14 +51,14 @@ This stack enables rapid development while maintaining professional code quality
 
 Each document in the `issues` collection has the following structure:
 {
-id: "auto-generated-doc-id", // Firebase auto-generated
-title: "Fix login button alignment", // String
-description: "The login button...", // String (detailed)
-priority: "High", // Enum: "Low" | "Medium" | "High"
-status: "In Progress", // Enum: "Open" | "In Progress" | "Done"
-assignedTo: "asfar@example.com", // String (email or name)
-createdBy: "admin@example.com", // String (creator's email)
-createdAt: "2025-12-29T18:30:00Z" // ISO 8601 timestamp string
+  id: "auto-generated-doc-id", // Firebase auto-generated
+  title: "Fix login button alignment", // String
+  description: "The login button...", // String (detailed)
+  priority: "High", // Enum: "Low" | "Medium" | "High"
+  status: "In Progress", // Enum: "Open" | "In Progress" | "Done"
+  assignedTo: "asfar@example.com", // String (email or name)
+  createdBy: "admin@example.com", // String (creator's email)
+  createdAt: "2025-12-29T18:30:00Z" // ISO 8601 timestamp string
 }
 
 ### Design Decisions
@@ -294,34 +294,35 @@ Open http://localhost:5173 in your browser.
 
 issue-tracker/
 ├── src/
-│ ├── components/
-│ │ ├── ui/ # shadcn components
-│ │ │ ├── button.jsx
-│ │ │ ├── input.jsx
-│ │ │ ├── select.jsx
-│ │ │ ├── textarea.jsx
-│ │ │ ├── card.jsx
-│ │ │ ├── badge.jsx
-│ │ │ ├── alert.jsx
-│ │ │ ├── label.jsx
-│ │ │ └── dialog.jsx
-│ │ ├── Auth.jsx # Login/signup component
-│ │ ├── CreateIssue.jsx # Issue creation form
-│ │ ├── IssueList.jsx # Issues display & filters
-│ │ └── SimilarIssuesDialog.jsx # Duplicate detection UI
-│ ├── lib/
-│ │ └── utils.js # Utility functions (cn helper)
-│ ├── firebase.js # Firebase initialization
-│ ├── App.jsx # Main app component
-│ ├── main.jsx # React entry point
-│ └── index.css # Global styles + Tailwind
-├── .env # Environment variables (gitignored)
-├── .env.example # Template for .env
-├── components.json # shadcn configuration
-├── jsconfig.json # Path aliases
-├── tailwind.config.js # Tailwind configuration
-├── vite.config.js # Vite configuration
-└── package.json # Dependencies
+│   ├── components/
+│   │   ├── ui/                  # shadcn components
+│   │   │   ├── button.jsx
+│   │   │   ├── input.jsx
+│   │   │   ├── select.jsx
+│   │   │   ├── textarea.jsx
+│   │   │   ├── card.jsx
+│   │   │   ├── badge.jsx
+│   │   │   ├── alert.jsx
+│   │   │   ├── label.jsx
+│   │   │   └── dialog.jsx
+│   │   ├── Auth.jsx             # Login/signup component
+│   │   ├── CreateIssue.jsx      # Issue creation form
+│   │   ├── IssueList.jsx        # Issues display & filters
+│   │   └── SimilarIssuesDialog.jsx # Duplicate detection UI
+│   ├── lib/
+│   │   └── utils.js             # Utility functions (cn helper)
+│   ├── firebase.js              # Firebase initialization
+│   ├── App.jsx                  # Main app component
+│   ├── main.jsx                 # React entry point
+│   └── index.css                # Global styles + Tailwind
+├── .env                         # Environment variables (gitignored)
+├── .env.example                 # Template for .env
+├── components.json              # shadcn configuration
+├── jsconfig.json                # Path aliases
+├── tailwind.config.js           # Tailwind configuration
+├── vite.config.js               # Vite configuration
+└── package.json                 # Dependencies
+
 
 ## Technologies Used
 
