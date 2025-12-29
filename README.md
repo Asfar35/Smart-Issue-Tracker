@@ -16,7 +16,7 @@ A modern, full-featured issue tracking system built with React, Firebase, Tailwi
 - ✅ **Modern UI**: Clean, professional interface using shadcn/ui components
 ## Live Demo
 
-🚀 **[View Live Application](https://smart-issue-tracker.vercel.app)**
+🚀 **[View Live Application](https://smart-issue-tracker-eta.vercel.app/)**
 
 Test credentials (optional):
 - Email: test@example.com
@@ -50,6 +50,7 @@ This stack enables rapid development while maintaining professional code quality
 ### Collection: `issues`
 
 Each document in the `issues` collection has the following structure:
+```text
 {
   id: "auto-generated-doc-id", // Firebase auto-generated
   title: "Fix login button alignment", // String
@@ -60,7 +61,7 @@ Each document in the `issues` collection has the following structure:
   createdBy: "admin@example.com", // String (creator's email)
   createdAt: "2025-12-29T18:30:00Z" // ISO 8601 timestamp string
 }
-
+```
 ### Design Decisions
 
 **Flat Structure**: I chose a single collection instead of nested subcollections because:
@@ -85,33 +86,33 @@ Each document in the `issues` collection has the following structure:
 ### Implementation Strategy
 
 I implemented a **keyword-based similarity detection** algorithm that runs client-side before creating new issues:
-
+```text
 const checkSimilarIssues = async (searchTitle) => {
-// 1. Extract meaningful keywords (ignore words < 3 chars)
-const titleWords = searchTitle.toLowerCase()
-.split(' ')
-.filter(word => word.length > 2);
-
-// 2. Fetch all existing issues
-const querySnapshot = await getDocs(issuesRef);
-
-// 3. Calculate similarity score for each issue
-const similar = [];
-querySnapshot.forEach((doc) => {
-const issue = doc.data();
-const issueTitle = issue.title.toLowerCase();
-// Count matching keywords
-const matchCount = titleWords.filter(word => 
-  issueTitle.includes(word)
-).length;
-
-// Calculate similarity percentage
-const similarity = matchCount / titleWords.length;
-
-// Threshold: 40% keyword match
-if (similarity > 0.4) {
-  similar.push({ id: doc.id, ...issue, similarity });
-}
+  // 1. Extract meaningful keywords (ignore words < 3 chars)
+  const titleWords = searchTitle.toLowerCase()
+  .split(' ')
+  .filter(word => word.length > 2);
+  
+  // 2. Fetch all existing issues
+  const querySnapshot = await getDocs(issuesRef);
+  
+  // 3. Calculate similarity score for each issue
+  const similar = [];
+  querySnapshot.forEach((doc) => {
+  const issue = doc.data();
+  const issueTitle = issue.title.toLowerCase();
+  // Count matching keywords
+  const matchCount = titleWords.filter(word => 
+    issueTitle.includes(word)
+  ).length;
+  
+  // Calculate similarity percentage
+  const similarity = matchCount / titleWords.length;
+  
+  // Threshold: 40% keyword match
+  if (similarity > 0.4) {
+    similar.push({ id: doc.id, ...issue, similarity });
+  }
 });
 
 // 4. Return top 3 most similar issues
@@ -119,7 +120,7 @@ return similar
 .sort((a, b) => b.similarity - a.similarity)
 .slice(0, 3);
 };
-
+```
 ### Why This Approach?
 
 1. **No External Dependencies**: Avoids heavy NLP libraries, keeping bundle size small
@@ -254,48 +255,54 @@ return similar
 - Firebase account
 
 ### Step 1: Clone & Install
+```text
 git clone <your-repo-url>
 cd issue-tracker
 npm install
+```
 
 ### Step 2: Firebase Configuration
 1. Create a Firebase project at https://console.firebase.google.com
 2. Enable Email/Password authentication
 3. Create a Firestore database
 4. Copy your config and create `.env`:
-
+```text
 VITE_FIREBASE_API_KEY=your_api_key
 VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
 VITE_FIREBASE_PROJECT_ID=your_project_id
 VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
 VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 VITE_FIREBASE_APP_ID=your_app_id
-
+```
 ### Step 3: Firestore Security Rules
+```text
 rules_version = '2';
 service cloud.firestore {
-match /databases/{database}/documents {
-match /issues/{issue} {
-allow read: if request.auth != null;
-allow create: if request.auth != null;
-allow update: if request.auth != null &&
-!(resource.data.status == 'Open' && request.resource.data.status == 'Done');
-allow delete: if request.auth != null;
+  match /databases/{database}/documents {
+      match /issues/{issue} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null &&
+      !(resource.data.status == 'Open' && request.resource.data.status == 'Done');
+      allow delete: if request.auth != null;
+    }
+  }
 }
-}
-}
+```
 
 ### Step 4: Run Development Server
+```text
 npm run dev
-
+```
 Open http://localhost:5173 in your browser.
 
 ## Project Structure
 
-issue-tracker/
+```text
+smart-issue-tracker/
 ├── src/
 │   ├── components/
-│   │   ├── ui/                  # shadcn components
+│   │   ├── ui/                     # shadcn components
 │   │   │   ├── button.jsx
 │   │   │   ├── input.jsx
 │   │   │   ├── select.jsx
@@ -305,24 +312,24 @@ issue-tracker/
 │   │   │   ├── alert.jsx
 │   │   │   ├── label.jsx
 │   │   │   └── dialog.jsx
-│   │   ├── Auth.jsx             # Login/signup component
-│   │   ├── CreateIssue.jsx      # Issue creation form
-│   │   ├── IssueList.jsx        # Issues display & filters
+│   │   ├── Auth.jsx                # Login/signup component
+│   │   ├── CreateIssue.jsx         # Issue creation form
+│   │   ├── IssueList.jsx           # Issues display & filters
 │   │   └── SimilarIssuesDialog.jsx # Duplicate detection UI
 │   ├── lib/
-│   │   └── utils.js             # Utility functions (cn helper)
-│   ├── firebase.js              # Firebase initialization
-│   ├── App.jsx                  # Main app component
-│   ├── main.jsx                 # React entry point
-│   └── index.css                # Global styles + Tailwind
-├── .env                         # Environment variables (gitignored)
-├── .env.example                 # Template for .env
-├── components.json              # shadcn configuration
-├── jsconfig.json                # Path aliases
-├── tailwind.config.js           # Tailwind configuration
-├── vite.config.js               # Vite configuration
-└── package.json                 # Dependencies
-
+│   │   └── utils.js                # Utility functions (cn helper)
+│   ├── firebase.js                 # Firebase initialization
+│   ├── App.jsx                     # Main app component
+│   ├── main.jsx                    # React entry point
+│   └── index.css                   # Global styles + Tailwind
+├── .env                            # Environment variables (gitignored)
+├── .env.example                    # Template for .env
+├── components.json                 # shadcn configuration
+├── jsconfig.json                   # Path aliases
+├── tailwind.config.js              # Tailwind configuration
+├── vite.config.js                  # Vite configuration
+└── package.json                    # Dependencies
+```
 
 ## Technologies Used
 
